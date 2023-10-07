@@ -13,6 +13,18 @@ As their data engineer, you are tasked with building an ETL pipeline that extrac
   <img src="images/sparkify-s3-to-redshift-etl.jpg" alt="Sparkify s3 to redshift etl" width=60% height=60%>
 </figure>
 
+## Quick start
+
+First, rename dwh_template.cfg to dwh.cfg and fill in the open fields. Fill in AWS acces key (KEY) and secret (SECRET).
+
+To access AWS, you need to do in AWS the following:
+
+* create IAM user (e.g. dwhuser)
+* create IAM role (e.g. dwhRole) with AmazonS3ReadOnlyAccess access rights
+* get ARN
+* create and run Redshift cluster (e.g. dwhCluster => HOST)`.
+---
+
 ## Project Description
 
 Application of Data warehouse and AWS to build an ETL Pipeline for a database hosted on Redshift Will need to load data from S3 to staging tables on Redshift and execute SQL Statements that create fact and dimension tables from these staging tables to create analytics
@@ -209,10 +221,88 @@ staging_songs
 - year (INT): Year associated to start_time
 - weekday (TEXT): Name of week day associated to start_time
 
-3 Run etl in console, and verify results:
- ```
-python etl.py
+
+## HOWTO use
+
+**Project has two scripts:**
+
+* **create_tables.py**: This script drops existing tables and creates new ones.
+* **etl.py**: This script uses data in s3:/udacity-dend/song_data and s3:/udacity-dend/log_data, processes it, and inserts the processed data into DB.
+
+### Prerequisites
+
+Python3 is recommended as the environment. The most convenient way to install python is to use Anaconda (https://www.anaconda.com/distribution/) either via GUI or command line.
+Also, the following libraries are needed for the python environment to make Jupyter Notebook and AWS Redshift to work:
+
+* _AWS SDK (boto3)_ (+ dependencies) to enable scripts and Jupyter to connect to AWS Redshift DB. (See https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+* _jupyter_ (+ dependencies) to enable Jupyter Notebook.
+* _ipython-sql_ (https://anaconda.org/conda-forge/ipython-sql) to make Jupyter Notebook and SQL queries to AWS Redshift work together. NOTE: you may need to install this library from command line.
+
+### Run create_tables.py
+
+Type to command line:
+
+`python3 create_tables.py`
+
+* All tables are dropped.
+* New tables are created: 2x staging tables + 4x dimensional tables + 1x fact table.
+* Output: Script writes _"Tables dropped successfully"_ and _"Tables created successfully"_ if all tables were dropped and created without errors.
+
+### Run etl.py
+
+Type to command line:
+
+`python3 etl.py`
+
+* Script executes AWS Redshift COPY commands to insert source data (JSON files) to DB staging tables.
+* From staging tables, data is further inserted to analytics tables.
+* Script writes to console the query it's executing at any given time and if the query was successfully executed.
+* In the end, script tells if whole ETL-pipeline was successfully executed.
+
+Output: raw data is in staging_tables + selected data in analytics tables.
+
+## Data cleaning process
+
+`etl.py`works the following way to process the data from source files to analytics tables:
+
+* Loading part of the script (COPY from JSON to staging tables) query takes the data as it is.
+* When inserting data from staging tables to analytics tables, queries remove any duplicates (INSERT ... SELECT DISTINCT ...).
+
+## Example queries
+
+* Get users and songs they listened at particular time. Limit query to 1000 hits:
+
 ```
-However, in this project I have wrote a script on Jupyter Notebook to run the scripts
+SELECT  sp.songplay_id,
+        u.user_id,
+        s.song_id,
+        u.last_name,
+        sp.start_time,
+        a.name,
+        s.title
+FROM songplays AS sp
+        JOIN users   AS u ON (u.user_id = sp.user_id)
+        JOIN songs   AS s ON (s.song_id = sp.song_id)
+        JOIN artists AS a ON (a.artist_id = sp.artist_id)
+        JOIN time    AS t ON (t.start_time = sp.start_time)
+ORDER BY (sp.start_time)
+LIMIT 1000;
+```
 
+* Get count of rows in staging_songs table:
 
+```
+SELECT COUNT(*)
+FROM staging_songs;
+```
+
+* Get count of rows in songplays table:
+
+```
+SELECT COUNT(*)
+FROM songplays;
+```
+
+## Summary
+
+Project-3 provides customer startup Sparkify tools to analyse their service data and help them answer their key business questions like "Who listened which song and when?"

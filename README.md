@@ -31,9 +31,9 @@ Application of Data warehouse and AWS to build an ETL Pipeline for a database ho
 
 ## The data source is publicly provided by udacity on the following public buckets:
 
-LOG_DATA='s3://udacity-dend/log_data'
-LOG_JSONPATH='s3://udacity-dend/log_json_path.json'
-SONG_DATA='s3://udacity-dend/song_data'
+* LOG_DATA='s3://udacity-dend/log_data'
+* LOG_JSONPATH='s3://udacity-dend/log_json_path.json'
+* SONG_DATA='s3://udacity-dend/song_data'
 
 These are located in dwh.cfg file on this project.
 

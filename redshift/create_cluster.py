@@ -9,7 +9,7 @@ def get_cluster_details():
         Gets the credentials from the config file
     """
     config = configparser.ConfigParser()
-    config.read_file(open('dwh.cfg'))
+    config.read_file(open('./redshift/dwh.cfg'))
 
     KEY                    = config.get('AWS','KEY')
     SECRET                 = config.get('AWS','SECRET')

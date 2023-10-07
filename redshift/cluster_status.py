@@ -3,7 +3,7 @@ import configparser
 
 ## Getting the credentials and checking the cluster status
 config = configparser.ConfigParser()
-config.read_file(open('dwh.cfg'))
+config.read_file(open('./redshift/dwh.cfg'))
 
 KEY                         = config.get('AWS','KEY')
 SECRET                      = config.get('AWS','SECRET')

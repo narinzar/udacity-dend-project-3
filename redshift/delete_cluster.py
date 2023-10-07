@@ -4,7 +4,7 @@ import configparser
 ## Getting the cluster in order to delete it and detach 
 ## the iam role
 config = configparser.ConfigParser()
-config.read_file(open('dwh.cfg'))
+config.read_file(open('./redshift/dwh.cfg'))
 
 KEY                         = config.get('AWS','KEY')
 SECRET                      = config.get('AWS','SECRET')

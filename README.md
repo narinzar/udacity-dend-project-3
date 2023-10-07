@@ -305,4 +305,4 @@ FROM songplays;
 
 ## Summary
 
-Project-3 provides customer startup Sparkify tools to analyse their service data and help them answer their key business questions like "Who listened which song and when?" Basically, you will enter the AWS information in dwh.cfg and create clusters then createtables.py followed by etl.py and perform any data analysis for the analytics team.
+Project-3 provides customer startup Sparkify tools to analyse their service data and help them answer their key business questions like "Who listened which song and when?" Basically, you will enter the AWS information in dwh.cfg and create clusters then createtables.py followed by sqlqueries.py and etl.py and perform any data analysis for the analytics team.

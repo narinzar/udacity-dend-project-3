@@ -106,10 +106,11 @@ SQL query statement collecitons for `create_tables.py` and `etl.py`
 ## About Database
 
 Sparkify analytics database (called here sparkifydb) schema has a star design. Start design means that it has one Fact Table having business data, and supporting Dimension Tables. The Fact Table answers one of the key questions: what songs users are listening to. DB schema is the following:
+ 
+<figure>
+  <img src="images/starschema.jpg" alt="Star Schema" width=60% height=60%>
+</figure>
 
-![SparkifyDB schema as ER Diagram](./Udacity-DEND-C3-Project3-ERD-20190517v1.png)
-
-_*SparkifyDB schema as ER Diagram.*_
 
 ## Database schema design
 
